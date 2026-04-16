@@ -114,51 +114,32 @@ cp credentials-email.json.example credentials.json
 # For mobile login, use credentials-mobile.json.example instead
 ```
 
-### 3. Configure devices
+### 3. Configure MQTT broker
 
 ```bash
 cp devices.yaml.example devices.yaml
-# Edit devices.yaml with your MQTT broker IP and credentials
-# Leave the devices section empty for now
+# Edit devices.yaml — set your MQTT broker IP, port, username, password
+# Leave the devices section empty — they will be auto-discovered
 ```
 
-### 4. Discover your devices
-
-```bash
-pip install -r requirements.txt
-python3 miraie_bridge.py
-```
-
-The bridge will login, discover all your ACs, and print the device config:
-```yaml
-  - name: Living Room AC
-    slug: kpr_05f448d0cfa6
-    space: Living Room
-    device_id: 05f448d0cfa6
-    manufacturer: KPR
-    model: Panasonic MirAIe Smart AC
-```
-
-Copy the output into `devices.yaml` under `devices:`.
-
-### 5. Deploy bridge
+### 4. Run the bridge
 
 **Important:** Run all commands from inside the `bridge/` directory.
 
 **With Docker (recommended):**
 ```bash
-cd bridge
 docker compose up -d
 ```
 
 **Or directly with Python:**
 ```bash
-cd bridge
 pip install -r requirements.txt
 python3 miraie_bridge.py
 ```
 
-### 6. Verify
+On first run, the bridge auto-discovers all your ACs from MirAIe cloud, saves them to `devices.yaml`, and starts relaying.
+
+### 5. Verify
 
 ```bash
 docker logs miraie-bridge

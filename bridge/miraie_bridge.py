@@ -631,26 +631,35 @@ def main():
     auth.login()
     homes = auth.get_homes()
 
-    # Auto-discover devices if none configured
+    # Auto-discover and populate devices if none configured
     if not config.get("devices"):
-        print("\n[discovery] No devices in devices.yaml — listing all devices:\n")
-        print("Add the following to your devices.yaml under 'devices:':\n")
+        print("\n[discovery] No devices in devices.yaml — discovering...")
+        discovered = []
         for home in homes:
             for space in home.get("spaces", []):
                 for dev in space.get("devices", []):
                     device_id = dev.get("deviceId", "")
                     name = dev.get("deviceName", "AC")
                     space_name = space.get("spaceName", "")
-                    slug = f"kpr_{device_id}"
-                    print(f"  - name: {name}")
-                    print(f"    slug: {slug}")
-                    print(f"    space: {space_name}")
-                    print(f"    device_id: {device_id}")
-                    print(f"    manufacturer: KPR")
-                    print(f"    model: Panasonic MirAIe Smart AC")
-                    print()
-        print("[discovery] Copy the above into devices.yaml, then restart the bridge.")
-        return
+                    discovered.append({
+                        "name": name,
+                        "slug": f"kpr_{device_id}",
+                        "space": space_name,
+                        "device_id": device_id,
+                        "manufacturer": "KPR",
+                        "model": "Panasonic MirAIe Smart AC",
+                    })
+                    print(f"  Found: {name} ({device_id}) in {space_name}")
+
+        if discovered:
+            config["devices"] = discovered
+            with open(args.config, "w") as f:
+                yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+            print(f"\n[discovery] Saved {len(discovered)} device(s) to {args.config}")
+            print("[discovery] Restarting bridge with discovered devices...\n")
+        else:
+            print("[discovery] No devices found in your MirAIe home.")
+            return
 
     # Print device status
     for dev in config["devices"]:
