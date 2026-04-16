@@ -116,8 +116,16 @@ python3 miraie_bridge.py
 
 ### 2. Deploy bridge
 
+Deploy on any machine that can reach both your MQTT broker and the internet (e.g. the same host as your MQTT broker).
+
 ```bash
 docker compose up -d
+```
+
+Or run directly without Docker:
+```bash
+pip install -r requirements.txt
+python3 miraie_bridge.py
 ```
 
 ### 3. Verify
