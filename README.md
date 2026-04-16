@@ -1,12 +1,12 @@
-<img src="custom_components/kpr_miraie_mqtt/logo.png" alt="KPR MirAIe" width="80">
+<img src="https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/icon.png" alt="KPR MirAIe" width="80">
 
-# Panasonic MirAIe Local MQTT — Home Assistant Integration
+# KPR MirAIe Local MQTT — Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 
 Home Assistant custom integration for Panasonic MirAIe smart air conditioners via local MQTT.
 
-![Device Page](images/device-page.png)
+![Device Page](https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/images/device-page.png)
 
 ## Features
 
@@ -47,19 +47,19 @@ Home Assistant custom integration for Panasonic MirAIe smart air conditioners vi
 1. Go to **Settings → Devices & Services → Add Integration**
 2. Search for **KPR MirAIe**
 
-![Search](images/search.png)
+![Search](https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/images/search.png)
 
 3. Enter your MirAIe app credentials (email or mobile number + password)
 
-![Login](images/login.png)
+![Login](https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/images/login.png)
 
 4. All your ACs appear automatically under the integration
 
-![Integration](images/integration.png)
+![Integration](https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/images/integration.png)
 
 5. View and control your AC devices under **MQTT** integration
 
-![MQTT Devices](images/mqtt-devices.png)
+![MQTT Devices](https://raw.githubusercontent.com/hareeshmu/kpr-miraie-mqtt/main/images/mqtt-devices.png)
 
 ## Entities
 
