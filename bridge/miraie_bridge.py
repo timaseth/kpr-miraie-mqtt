@@ -513,6 +513,22 @@ class MirAIeBridge:
             return
 
         local_topic = f"{LOCAL_TOPIC_PREFIX}/{device_id}/{msg_type}"
+
+        # Fix swapped rmtmp (firmware bug on some models e.g. 130251):
+        # e.g. '61.29' actually means 29.61°C, '02.27' actually means 27.02°C
+        # Zero-pad to 5 chars before swapping so '2.27' -> '0227' -> '2702' -> 27.02
+        if msg_type == "status":
+            try:
+                d = json.loads(payload)
+                raw = d.get("rmtmp")
+                if raw is not None and (float(raw) > 50 or float(raw) < 20):
+                    s = f"{float(raw):05.2f}".replace(".", "")  # '61.29' -> '6129'
+                    corrected = s[2:] + s[:2]                   # '6129'  -> '2961'
+                    d["rmtmp"] = float(f"{corrected[:2]}.{corrected[2:]}")  # 29.61
+                    payload = json.dumps(d)
+            except (ValueError, TypeError, json.JSONDecodeError):
+                pass
+
         self.local_client.publish(local_topic, payload, retain=True)
 
         # Log status updates with key fields
