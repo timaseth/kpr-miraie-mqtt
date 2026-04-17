@@ -199,6 +199,10 @@ You should see devices connecting and status flowing.
 
 ## Changelog
 
+### v1.2.5
+- New logo
+- Fix swapped room temperature on affected AC models (PR #1 by @timaseth)
+
 ### v1.2.4
 - Round operating hours to 1 decimal place
 
