@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Home Assistant custom integration + standalone MQTT bridge for Panasonic MirAIe smart ACs, plus a custom Lovelace card. Three components:
 - **HA component** (`custom_components/kpr_miraie_mqtt/`) — config flow, device discovery, MQTT Discovery publishing
 - **Bridge** (`bridge/`) — Docker container relaying cloud MQTT ↔ local MQTT broker
-- **Card** (`card/`) — Lovelace custom card (`kpr-miraie-card`) with LVGL-inspired dial. Built via Rollup. Sandbox at `card/sandbox/dial.html` for visual iteration (gitignored).
+- **Card** — Lovelace custom card (`kpr-miraie-card`) with LVGL-inspired dial. Maintained in a separate repo: https://github.com/hareeshmu/kpr-miraie-card (HACS plugin). A mirror copy lives in `card/` in this repo for historical reference (v1.3.0 shipped both). Built via Rollup. Sandbox at `card/sandbox/dial.html` for visual iteration (gitignored).
 
 The HA component does NOT connect to cloud MQTT itself. It only publishes MQTT Discovery configs so HA auto-creates entities. The bridge handles all cloud relay.
 
