@@ -199,6 +199,9 @@ You should see devices connecting and status flowing.
 
 ## Changelog
 
+### v1.2.3
+- Hide filter/operating hours sensors for devices that don't support them
+
 ### v1.2.2
 - Fix Operating Hours, Filter Dust Level, Filter Cleaning sensors (now polled from REST API every 15 min)
 - These fields are not in MQTT status — requires REST API polling

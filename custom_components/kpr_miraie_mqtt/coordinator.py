@@ -82,14 +82,17 @@ class MirAIeCoordinator:
         except Exception as err:
             _LOGGER.warning("Could not get device details: %s", err)
 
-        # Get firmware version from status as fallback
+        # Get status from REST API — check which fields each device supports
         for device_id, dev in self.devices.items():
-            if not dev.get("fw_version"):
-                try:
-                    status = await self.api.async_get_device_status(self.hass, device_id)
+            try:
+                status = await self.api.async_get_device_status(self.hass, device_id)
+                if not dev.get("fw_version"):
                     dev["fw_version"] = status.get("V", "")
-                except Exception:
-                    pass
+                dev["has_filter"] = "filterDustLevel" in status
+                dev["has_hours"] = "totalOperatingHours" in status
+            except Exception:
+                dev["has_filter"] = False
+                dev["has_hours"] = False
 
         # Publish HA MQTT Discovery configs
         await self._publish_discovery()
@@ -337,43 +340,44 @@ class MirAIeCoordinator:
             "icon": "mdi:percent",
         }))
 
-        # Total operating hours sensor (from REST API)
+        # REST API sensors — only for devices that support them
         api_prefix = f"{TOPIC_PREFIX}/{device_id}/api"
-        entities.append(("sensor", f"{slug}_operating_hours", {
-            "name": "Operating Hours",
-            "unique_id": f"kpr_miraie_{device_id}_operating_hours",
-            "object_id": f"{slug}_operating_hours",
-            "device": device_block,
-            "state_topic": f"{api_prefix}/totalOperatingHours",
-            "unit_of_measurement": "h",
-            "icon": "mdi:clock-outline",
-            "state_class": "total_increasing",
-            "entity_category": "diagnostic",
-        }))
 
-        # Filter dust level sensor (from REST API)
-        entities.append(("sensor", f"{slug}_filter_dust", {
-            "name": "Filter Dust Level",
-            "unique_id": f"kpr_miraie_{device_id}_filter_dust",
-            "object_id": f"{slug}_filter_dust",
-            "device": device_block,
-            "state_topic": f"{api_prefix}/filterDustLevel",
-            "icon": "mdi:air-filter",
-            "entity_category": "diagnostic",
-        }))
+        if dev.get("has_hours"):
+            entities.append(("sensor", f"{slug}_operating_hours", {
+                "name": "Operating Hours",
+                "unique_id": f"kpr_miraie_{device_id}_operating_hours",
+                "object_id": f"{slug}_operating_hours",
+                "device": device_block,
+                "state_topic": f"{api_prefix}/totalOperatingHours",
+                "unit_of_measurement": "h",
+                "icon": "mdi:clock-outline",
+                "state_class": "total_increasing",
+                "entity_category": "diagnostic",
+            }))
 
-        # Filter cleaning required binary sensor (from REST API)
-        entities.append(("binary_sensor", f"{slug}_filter_clean", {
-            "name": "Filter Cleaning Required",
-            "unique_id": f"kpr_miraie_{device_id}_filter_clean",
-            "object_id": f"{slug}_filter_clean",
-            "device": device_block,
-            "state_topic": f"{api_prefix}/filterCleaningRequired",
-            "payload_on": "True",
-            "payload_off": "False",
-            "device_class": "problem",
-            "entity_category": "diagnostic",
-        }))
+        if dev.get("has_filter"):
+            entities.append(("sensor", f"{slug}_filter_dust", {
+                "name": "Filter Dust Level",
+                "unique_id": f"kpr_miraie_{device_id}_filter_dust",
+                "object_id": f"{slug}_filter_dust",
+                "device": device_block,
+                "state_topic": f"{api_prefix}/filterDustLevel",
+                "icon": "mdi:air-filter",
+                "entity_category": "diagnostic",
+            }))
+
+            entities.append(("binary_sensor", f"{slug}_filter_clean", {
+                "name": "Filter Cleaning Required",
+                "unique_id": f"kpr_miraie_{device_id}_filter_clean",
+                "object_id": f"{slug}_filter_clean",
+                "device": device_block,
+                "state_topic": f"{api_prefix}/filterCleaningRequired",
+                "payload_on": "True",
+                "payload_off": "False",
+                "device_class": "problem",
+                "entity_category": "diagnostic",
+            }))
 
         # Energy consumption sensors
         for period, label in [("daily", "Energy Daily"), ("weekly", "Energy Weekly"), ("monthly", "Energy Monthly")]:
