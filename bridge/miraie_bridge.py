@@ -521,7 +521,7 @@ class MirAIeBridge:
             try:
                 d = json.loads(payload)
                 raw = d.get("rmtmp")
-                if raw is not None and (float(raw) > 50 or float(raw) < 20):
+                if raw is not None and (float(raw) > 50 or float(raw) < 10):
                     s = f"{float(raw):05.2f}".replace(".", "")  # '61.29' -> '6129'
                     corrected = s[2:] + s[:2]                   # '6129'  -> '2961'
                     d["rmtmp"] = float(f"{corrected[:2]}.{corrected[2:]}")  # 29.61
