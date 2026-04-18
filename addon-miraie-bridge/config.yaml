@@ -1,0 +1,76 @@
+---
+name: MirAIe MQTT Bridge
+version: 1.0.0
+slug: miraie-mqtt-bridge
+description: >-
+  Relay Panasonic MirAIe cloud MQTT to your local MQTT broker.
+  Auto-discovers AC devices on first run and bridges status/control messages
+  so Home Assistant can control them without any cloud dependency at runtime.
+url: https://github.com/hareeshmu/kpr-miraie-mqtt
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - armhf
+  - i386
+
+startup: application
+boot: auto
+
+# Disable s6-overlay init — our CMD runs as PID 1 directly.
+# This is the standard pattern for simple add-ons per hassio-addons/addon-example.
+init: false
+
+# Allow the add-on to query the Supervisor API (used to auto-discover
+# Mosquitto MQTT credentials when mqtt_host is left empty).
+homeassistant_api: true
+
+# Request HA Supervisor to inject local MQTT credentials automatically
+# when the Mosquitto broker add-on is installed. Users with an external
+# broker can override via the mqtt_host / mqtt_port / mqtt_* options below.
+mqtt: true
+
+# Persist discovered devices.yaml and credentials.json across restarts
+map:
+  - addon_config:rw
+
+options:
+  login_type: email
+  username: ""
+  password: ""
+  cloud_broker: mqtt.miraie.in
+  cloud_port: 8883
+  ha_discovery_prefix: homeassistant
+  # Leave empty to use HA Mosquitto add-on auto-credentials
+  mqtt_host: ""
+  mqtt_port: 1883
+  mqtt_username: ""
+  mqtt_password: ""
+  # Advanced: custom device overrides (list of device objects)
+  # Each entry: {device_id, name, slug, space, manufacturer, model}
+  # Leave empty to rely on auto-discovery from the cloud API
+  devices: []
+
+schema:
+  login_type: list(email|mobile)
+  username: str
+  password: password
+  cloud_broker: str
+  cloud_port: port
+  ha_discovery_prefix: str
+  mqtt_host: str?
+  mqtt_port: port?
+  mqtt_username: str?
+  mqtt_password: password?
+  devices:
+    - device_id: str
+      name: str
+      slug: str
+      space: str?
+      manufacturer: str?
+      model: str?
+
+# image: ghcr.io/hareeshmu/addon-miraie-bridge-{arch}
+# Uncomment the line above (and remove this comment) once a pre-built image
+# is published to GHCR. While commented out, HA Supervisor builds the image
+# locally from the Dockerfile — correct for development and first-time testing.

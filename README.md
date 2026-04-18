@@ -102,9 +102,33 @@ Your Home Assistant only communicates with your local MQTT broker — it never t
 
 ## Bridge Setup (Required)
 
-The HA component handles device discovery and entity creation. A separate **bridge** container relays MQTT messages between MirAIe cloud and your local broker. Both are needed.
+The HA component handles device discovery and entity creation. A separate **bridge** relays MQTT messages between MirAIe cloud and your local broker. You have two options — choose one:
 
-### 1. Copy bridge files to your server
+---
+
+### Option A — HA Add-on (Recommended for HAOS users)
+
+If you are running Home Assistant OS or Supervised, the easiest way is the
+**MirAIe MQTT Bridge add-on** — developed by
+[@pranjal-joshi](https://github.com/pranjal-joshi). It runs the bridge directly
+inside HA with zero extra infrastructure needed.
+
+[![Open your Home Assistant instance and show the dashboard of an app.](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=miraie-mqtt-bridge&repository_url=https%3A%2F%2Fgithub.com%2Fhareeshmu%2Fkpr-miraie-mqtt)
+
+**Quick install:**
+
+1. Click the button above — it opens HA and pre-fills the repository URL.  
+   _Or manually:_ **Settings → Add-ons → Add-on Store → ⋮ → Repositories** → paste `https://github.com/hareeshmu/kpr-miraie-mqtt`
+2. Find **MirAIe MQTT Bridge** in the store → **Install**
+3. Go to the **Configuration** tab, enter your MirAIe credentials and leave `mqtt_*` fields empty if you use the Mosquitto add-on
+4. **Start** the add-on — devices are auto-discovered on first run
+5. Restart once after discovery, then check **Settings → Devices & Services → MQTT** for your entities
+
+Full add-on documentation: [`addon-miraie-bridge/DOCS.md`](addon-miraie-bridge/DOCS.md)
+
+---
+
+### Option B — Standalone Docker bridge
 
 Copy the `bridge/` folder to any machine that can reach both your MQTT broker and the internet (e.g. the same host as your MQTT broker):
 
@@ -208,6 +232,13 @@ You should see devices connecting and status flowing.
 
 > Companion card changes are tracked in the **[kpr-miraie-card](https://github.com/hareeshmu/kpr-miraie-card/releases)** repo. Most recent: **v1.3.4** — auto-derive companion entities survives climate renames (resolves via HA entity registry `device_id`).
 
+### Add-on v1.0.0
+- **New: MirAIe MQTT Bridge HA add-on** by [@pranjal-joshi](https://github.com/pranjal-joshi)
+- Runs the bridge natively inside Home Assistant OS — no separate Docker host needed
+- Auto-discovers Mosquitto credentials via Supervisor API
+- Auto-discovers MirAIe devices on first run; persists across restarts
+- Full configuration via HA UI (no YAML files to edit)
+
 ### v1.3.0
 - **New Lovelace card** ([kpr-miraie-card](https://github.com/hareeshmu/kpr-miraie-card)) — [LVGL-inspired](https://github.com/hareeshmu/climate-control-display) circular dial, mode-color halo, draggable handle, room-temp needle, pill-row popups, responsive layout, auto-derived companion entities. Shipped as a separate HACS plugin repo.
 - **Protocol fix: Clean vs Eco** — `acec` is the MirAIe app's Clean button, not Eco. `acem` is real Eco mode. Both are now exposed as separate switches (`switch.kpr_<id>_acec` kept for history; new `switch.kpr_<id>_acem` added)
@@ -270,6 +301,7 @@ You should see devices connecting and status flowing.
 A warm thank-you to everyone who has helped shape this project 💙
 
 - [@hareeshmu](https://github.com/hareeshmu) — original author & maintainer
+- [@pranjal-joshi](https://github.com/pranjal-joshi) — HA add-on developer
 - [@timaseth](https://github.com/timaseth) — swapped room-temperature fix (PR #1)
 
 Bug reports, issues, and PRs are all genuinely appreciated — the integration, bridge, and card are better because of the community poking at them on real hardware. If you've tested a new MirAIe model, caught a quirk, or just helped validate behaviour, thank you.

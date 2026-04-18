@@ -1,0 +1,10 @@
+---
+# hassio-addons/base is Alpine-based, arch-specific, and the standard
+# base used by official HA community add-ons.
+# Pinned to 20.0.4 — :latest tag does not exist on GHCR for this image.
+build_from:
+  aarch64: ghcr.io/hassio-addons/base:20.0.4
+  amd64: ghcr.io/hassio-addons/base:20.0.4
+  armv7: ghcr.io/hassio-addons/base:20.0.4
+  armhf: ghcr.io/hassio-addons/base:20.0.4
+  i386: ghcr.io/hassio-addons/base:20.0.4

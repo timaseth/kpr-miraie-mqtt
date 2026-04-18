@@ -1,0 +1,51 @@
+configuration:
+  login_type:
+    name: Login Type
+    description: >-
+      Use "email" if you registered with an email address, "mobile" if you
+      used a phone number (e.g. +91XXXXXXXXXX).
+  username:
+    name: Username (Email or Mobile)
+    description: >-
+      Your MirAIe account email address or mobile number including country
+      code, e.g. +91XXXXXXXXXX.
+  password:
+    name: Password
+    description: Your MirAIe account password.
+  cloud_broker:
+    name: Cloud MQTT Broker
+    description: >-
+      MirAIe cloud broker hostname. Only change if Panasonic migrates their
+      infrastructure. Default is mqtt.miraie.in
+  cloud_port:
+    name: Cloud MQTT Port
+    description: "MirAIe cloud broker TLS port. Default: 8883"
+  ha_discovery_prefix:
+    name: HA Discovery Prefix
+    description: >-
+      MQTT topic prefix Home Assistant uses for discovery. Only change
+      if you customised the HA MQTT integration. Default is homeassistant
+  mqtt_host:
+    name: MQTT Broker Host
+    description: >-
+      IP or hostname of your local MQTT broker. Leave empty to automatically
+      use the HA Mosquitto add-on credentials (recommended).
+  mqtt_port:
+    name: MQTT Broker Port
+    description: "Port of your local MQTT broker. Only used when mqtt_host is set. Default: 1883"
+  mqtt_username:
+    name: MQTT Username
+    description: >-
+      Username for your local MQTT broker. Leave empty when using the HA
+      Mosquitto add-on; credentials are auto-injected by the Supervisor.
+  mqtt_password:
+    name: MQTT Password
+    description: >-
+      Password for your local MQTT broker. Leave empty when using the HA
+      Mosquitto add-on; credentials are auto-injected by the Supervisor.
+  devices:
+    name: Device Overrides
+    description: >-
+      Optional list of device entries to override auto-discovery. Each entry
+      needs device_id, name, and slug. Leave empty on first run so the bridge
+      can discover devices automatically from the MirAIe cloud API.
