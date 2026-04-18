@@ -206,7 +206,7 @@ You should see devices connecting and status flowing.
 
 ## Changelog
 
-> Companion card changes are tracked in the **[kpr-miraie-card](https://github.com/hareeshmu/kpr-miraie-card/releases)** repo. Most recent: **v1.3.3** — ⋮ header button now opens an inline Device info / Related / Details dropdown instead of jumping straight to the HA more-info dialog.
+> Companion card changes are tracked in the **[kpr-miraie-card](https://github.com/hareeshmu/kpr-miraie-card/releases)** repo. Most recent: **v1.3.4** — auto-derive companion entities survives climate renames (resolves via HA entity registry `device_id`).
 
 ### v1.3.0
 - **New Lovelace card** ([kpr-miraie-card](https://github.com/hareeshmu/kpr-miraie-card)) — [LVGL-inspired](https://github.com/hareeshmu/climate-control-display) circular dial, mode-color halo, draggable handle, room-temp needle, pill-row popups, responsive layout, auto-derived companion entities. Shipped as a separate HACS plugin repo.
